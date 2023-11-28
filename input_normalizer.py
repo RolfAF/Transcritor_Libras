@@ -46,19 +46,41 @@ while True:
             mpDraw.draw_landmarks(img, handlms, mpHands.HAND_CONNECTIONS)
         #print(results.multi_hand_landmarks[0].landmark[0].y)
         for i in range(1,21):
-            print("i:",i)
-            print(array[0])
-            print(array[i])
+            #print("i:",i)
             a = array[i][0]
             b = array[i][1]
             #if(a > 0):
-            c2 = pow(a,2)+pow(b,2)
-            c = int(math.sqrt(c2))
-            alpha = math.atan(a/b)
-            print("c: ",c)
-            print("alpha: ",alpha)
+            try:
+                c2 = pow(a,2)+pow(b,2)
+                c = math.sqrt(c2)
+                array[i].append(c)
+                #alpha = math.degrees(math.atan(a/b)) # 0 -> -90/90 -> 0 -> -90/90 -> 0
+                alpha = math.degrees(math.acos(b/c)) # 0 -> 90 -> 180/180 -> 90 -> 0
+                #print("c: ",c)
+                #print("alpha: ",alpha)
+                if(a > 0):
+                    angle = 360 - alpha
+                else:
+                    angle = alpha
+                #print("angle: ",angle)
+                array[i].append(angle)
+                #print(array[i])
+            except Exception as e:
+                print("Erro: ",e)
+        ref_angle = 180 - array[9][4]
+        print(ref_angle)
+        for i in range(1,10): # <- mudar pra 21!
+            print(ref_angle)
+            target_angle = array[i][4] + ref_angle #correto!
+            array[i].append(target_angle)
+            new_a = array[i][3] * math.sin(math.radians(target_angle)) #correto?!!!! (transformar em zero para array[9])
+            array[i].append(new_a)
+            print(array[i])
+
+                
         # calcular c e alpha para todos os pontos, subtrair alpha[9] dos outros pontos, c se torna b
         # para calcular novo x: a = c * sin(alpha)
+        #https://www.omnicalculator.com/math/angle-of-right-triangle
         #https://www.omnicalculator.com/math/right-triangle-side-angle
         
         array = []
