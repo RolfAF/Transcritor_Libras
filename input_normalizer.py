@@ -42,7 +42,7 @@ while True:
                 rel_py = py-ref_py
                 array.append([rel_px,rel_py,cz])
                 cv2.circle(img, (int(425-cz), cy), 5, (139, 0, 0), cv2.FILLED)
-                cv2.circle(img, (int(215+rel_cx), cy), 5, (139, 0, 0), cv2.FILLED)
+                #cv2.circle(img, (int(215+rel_cx), cy), 5, (139, 0, 0), cv2.FILLED)
             mpDraw.draw_landmarks(img, handlms, mpHands.HAND_CONNECTIONS)
         #print(results.multi_hand_landmarks[0].landmark[0].y)
         for i in range(1,21):
@@ -53,6 +53,7 @@ while True:
             try:
                 c2 = pow(a,2)+pow(b,2)
                 c = math.sqrt(c2)
+
                 array[i].append(c)
                 #alpha = math.degrees(math.atan(a/b)) # 0 -> -90/90 -> 0 -> -90/90 -> 0
                 alpha = math.degrees(math.acos(b/c)) # 0 -> 90 -> 180/180 -> 90 -> 0
@@ -68,15 +69,20 @@ while True:
             except Exception as e:
                 print("Erro: ",e)
         ref_angle = 180 - array[9][4]
+        ref_scale = array[9][3] / 200
+        cv2.circle(img, (200, h-20), 5, (139, 0, 0), cv2.FILLED)
         print(ref_angle)
-        for i in range(1,10): # <- mudar pra 21!
+        for i in range(1,21): # <- ponto zero nao incluso...
             print(ref_angle)
+            array[i][3] = array[i][3] / ref_scale #ajuste de escala
             target_angle = array[i][4] + ref_angle #correto!
             array[i].append(target_angle)
             new_a = array[i][3] * math.sin(math.radians(target_angle)) #correto?!!!! (transformar em zero para array[9])
+            if i == 9:
+                new_a = 0
             array[i].append(new_a)
             print(array[i])
-
+            cv2.circle(img, (int(-array[i][6]+200), int(-array[i][3]+h-20)), 5, (139, 0, 0), cv2.FILLED)
                 
         # calcular c e alpha para todos os pontos, subtrair alpha[9] dos outros pontos, c se torna b
         # para calcular novo x: a = c * sin(alpha)
