@@ -100,3 +100,6 @@ while True:
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
+
+#https://en.wikipedia.org/wiki/Rotation_matrix
+#https://www.geeksforgeeks.org/2d-transformation-in-computer-graphics-set-1-scaling-of-objects/
