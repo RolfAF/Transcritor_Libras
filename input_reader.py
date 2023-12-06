@@ -20,12 +20,17 @@ point = []
 points = []
 h = 480
 w = 640
+gesture = 0
 #inp = input("Iniciar leitura\n")
-f = open("raw/raw_a.txt", "r")
+prefix = "y"
+f = open("raw/raw_"+prefix+".txt", "r")
 lines = f.readlines()
+new_file = open("normalized/"+prefix+".txt", "a")
+new_line = ''
 #print(lines)
 #print(lines[0])
 for i in range(0,len(lines)): #separa todos os elementos de cada linha
+    print("i:",i)
     img = np.zeros((h,w,3), np.uint8)
     lines[i] = lines[i].split(",")
     for j in range(0,60,3): #agrupa as coordenadas x, y e z de cada ponto, e agrupa os 20 pontos
@@ -71,7 +76,12 @@ for i in range(0,len(lines)): #separa todos os elementos de cada linha
         print(lines[i][j])
         cv2.circle(img, (int(lines[i][j][0]), int(lines[i][j][1])), 5, (139, 0, 0), cv2.FILLED)
         cv2.circle(img, (int(350-float(lines[i][j][2])), int(aux_y + y)), 5, (139, 0, 0), cv2.FILLED)
+        new_line += str(x2)+","+str(y2)+","+str(lines[i][j][2])+","
     #array = []
+    new_line += str(gesture)
+    new_file.write(new_line+"\n")
+    new_line = ''
     cv2.imshow("Image", img)
     cv2.waitKey(1)
+new_file.close()
 #cv2.circle(img, (int(array[i][3]), int(array[i][4])), 5, (139, 0, 0), cv2.FILLED)
