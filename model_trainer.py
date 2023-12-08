@@ -3,7 +3,7 @@ from tensorflow.keras import layers, models
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-df = pd.DataFrame(pd.read_csv('normalized/main.txt', sep=",", header=None))
+df = pd.DataFrame(pd.read_csv('normalized_2/main.txt', sep=",", header=None))
 #data = pd.read_csv('normalized/b.txt', sep=",", header=None)
 #df = pd.DataFrame(data)
 #main = pd.concat([main,df],axis=1)
@@ -29,14 +29,15 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 # y_train: (num_samples,) array for corresponding labels (categories)
 
 # Train the model
-model.fit(X_train, y_train, epochs=10, batch_size=32)
+model.fit(X_train, y_train, epochs=220, batch_size=100)
 
 # Evaluate the model
 test_loss, test_acc = model.evaluate(X_test, y_test)
 print(f'Test accuracy: {test_acc}')
 
+model.save('model_3')
 # Make predictions on new data
-predictions = model.predict(new_data)
+#predictions = model.predict(new_data)
 
 # 'predictions' will contain the predicted probability distribution for each category
 # You can use np.argmax(predictions, axis=1) to get the predicted category for each example
