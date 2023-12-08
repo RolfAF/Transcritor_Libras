@@ -27,7 +27,7 @@ for k in range(0,len(prefix)):
     f = open("raw/raw_"+prefix[k]+".txt", "r")
     lines = f.readlines()
     #new_file = open("normalized/"+prefix[k]+".txt", "w")
-    new_file = open("normalized/main.txt", "a")
+    new_file = open("normalized_2/main.txt", "a")
     new_line = ''
     #print(lines)
     #print(lines[0])
@@ -69,14 +69,14 @@ for k in range(0,len(prefix)):
         for j in range(0,20):
             x = lines[i][j][0] / ref_scale
             y = lines[i][j][1] / ref_scale
-            x2 = aux_x + (x*math.cos(ref_angle)) - (y*math.sin(ref_angle))
-            y2 = aux_y + (x*math.sin(ref_angle)) + (y*math.cos(ref_angle))
+            x2 = (x*math.cos(ref_angle)) - (y*math.sin(ref_angle))
+            y2 = (x*math.sin(ref_angle)) + (y*math.cos(ref_angle))
             lines[i][j][0] = int(x2)
             lines[i][j][1] = int(y2)
             #array[j].append(x2)
             #array[j].append(y2)
             print(lines[i][j])
-            cv2.circle(img, (int(lines[i][j][0]), int(lines[i][j][1])), 5, (139, 0, 0), cv2.FILLED)
+            cv2.circle(img, (int(aux_x + lines[i][j][0]), int(aux_y + lines[i][j][1])), 5, (139, 0, 0), cv2.FILLED)
             cv2.circle(img, (int(350-float(lines[i][j][2])), int(aux_y + y)), 5, (139, 0, 0), cv2.FILLED)
             new_line += str(x2)+","+str(y2)+","+str(lines[i][j][2])+","
         #array = []
