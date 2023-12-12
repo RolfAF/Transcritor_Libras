@@ -5,11 +5,13 @@
 #include <string>
 #include <bits/stdc++.h>
 #include <cmath>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 
 int main(int argc, char * argv[]){
-    float start_time = 0;
-    float end_time = 0;
+    time_point<system_clock>start,end;
+    start = system_clock::now();
     char prefix[] = {'a','b','c','d','e','f','g','i','l','m','n','o','p','q','r','s','t','u','v','w','x','y'};
     omp_set_num_threads(22);
     #pragma omp parallel for
@@ -76,5 +78,8 @@ int main(int argc, char * argv[]){
         input_file.close();
         output_file.close();
     }
+    end = system_clock::now();
+    duration<double> total_time = end - start;
+    cout << total_time.count() << endl;
     return 0;
 }
