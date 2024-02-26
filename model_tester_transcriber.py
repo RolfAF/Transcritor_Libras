@@ -147,8 +147,8 @@ class InterfaceWindow(QMainWindow):
     """PyCalc's main window (GUI or view)."""
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PyCalc")
-        self.setFixedSize(730, 480)
+        self.setWindowTitle("Transcritor LIBRAS")
+        self.setFixedSize(850, 480)
         self.generalLayout = QHBoxLayout()
         self.leftWidget = QVBoxLayout()
         centralWidget = QWidget(self)
@@ -167,12 +167,15 @@ class InterfaceWindow(QMainWindow):
         #self.generalLayout.addWidget(self.label)
 
     def _createDisplay(self):
+        self.label_texto = QLabel("Texto transcrito:")
+        self.label_texto.move(0,0)
         self.display = QLineEdit()
         self.display.setFixedHeight(DISPLAY_HEIGHT)
-        self.display.move(0,300)
+        self.display.move(0,0)
         self.display.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.display.setReadOnly(True)
         #self.display.setText("asdasd")
+        self.leftWidget.addWidget(self.label_texto)
         self.leftWidget.addWidget(self.display)
 
     def _createLabel(self):
@@ -241,5 +244,5 @@ if __name__ == "__main__":
     main()
 #https://en.wikipedia.org/wiki/Rotation_matrix
 #https://www.geeksforgeeks.org/2d-transformation-in-computer-graphics-set-1-scaling-of-objects/
-https://www.aranacorp.com/en/displaying-an-opencv-image-in-a-pyqt-interface/
-https://stackoverflow.com/questions/57204782/show-an-opencv-image-with-pyqt5
+#https://www.aranacorp.com/en/displaying-an-opencv-image-in-a-pyqt-interface/
+#https://stackoverflow.com/questions/57204782/show-an-opencv-image-with-pyqt5
