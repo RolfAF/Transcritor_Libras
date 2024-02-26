@@ -14,6 +14,7 @@ from PyQt6.QtWidgets import (
     QMainWindow,
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
     QWidget,
     QLabel,
 )
@@ -41,6 +42,7 @@ def gestureReader(interfaceWindow):
     last_index = ''
     index_count = 0
     model = load_model('model_4')
+    test = 1
     while True:
         success, img = cap.read()
         img = cv2.flip(img, 1)
@@ -133,23 +135,30 @@ def gestureReader(interfaceWindow):
         fps = 1/(cTime-pTime)
         pTime = cTime
         cv2.putText(img, str(int(fps)), (10,70), cv2.FONT_HERSHEY_SIMPLEX, 3, (139,0,0), 3)
-
-        cv2.imshow("Image", img)
+        cv2.cvtColor(img, cv2.COLOR_BGR2RGB, img)
+        image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format.Format_RGB888)
+        interfaceWindow.video.setPixmap(QPixmap.fromImage(image))
+        if(test):
+            cv2.imshow("Image", img)
         cv2.waitKey(1)
+        test = 0
 
 class InterfaceWindow(QMainWindow):
     """PyCalc's main window (GUI or view)."""
     def __init__(self):
         super().__init__()
         self.setWindowTitle("PyCalc")
-        self.setFixedSize(WINDOW_SIZE, WINDOW_SIZE)
-        self.generalLayout = QVBoxLayout()
+        self.setFixedSize(730, 480)
+        self.generalLayout = QHBoxLayout()
+        self.leftWidget = QVBoxLayout()
         centralWidget = QWidget(self)
         centralWidget.setLayout(self.generalLayout)
+        self.generalLayout.addLayout(self.leftWidget)
         self.setCentralWidget(centralWidget)
         self._createDisplay()
         #self._createButtons()
         self._createLabel()
+        self._createVideo()
         #label = QLabel(self)
         #label.move(35, 10)
         #label.resize(175, 175)
@@ -164,7 +173,7 @@ class InterfaceWindow(QMainWindow):
         self.display.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.display.setReadOnly(True)
         #self.display.setText("asdasd")
-        self.generalLayout.addWidget(self.display)
+        self.leftWidget.addWidget(self.display)
 
     def _createLabel(self):
         # create a label
@@ -172,10 +181,18 @@ class InterfaceWindow(QMainWindow):
         self.label.move(35, 10)
         self.label.resize(175, 175)
         self.label.setPixmap(QPixmap(""))
-        self.generalLayout.addWidget(self.label)
+        self.leftWidget.addWidget(self.label)
         #th = Thread(self)
         #th.changePixmap.connect(self.setImage)
         #th.start()
+
+    def _createVideo(self):
+        # create a video
+        self.video = QLabel()
+        #self.video.move(35, 10)
+        self.video.resize(480, 640)
+        self.video.setPixmap(QPixmap(""))
+        self.generalLayout.addWidget(self.video)
 
     def _createButtons(self):
         self.buttonMap = {}
@@ -215,8 +232,8 @@ def main():
     interfaceApp = QApplication([])
     interfaceWindow = InterfaceWindow()
     interfaceWindow.show()
-    interfaceWindow.display.setText("qweqwe")
-    interfaceWindow.display.setText("zxczxc")
+    #interfaceWindow.display.setText("qweqwe")
+    #interfaceWindow.display.setText("zxczxc")
     gestureReader(interfaceWindow)
     sys.exit(interfaceApp.exec())
 
@@ -224,3 +241,5 @@ if __name__ == "__main__":
     main()
 #https://en.wikipedia.org/wiki/Rotation_matrix
 #https://www.geeksforgeeks.org/2d-transformation-in-computer-graphics-set-1-scaling-of-objects/
+https://www.aranacorp.com/en/displaying-an-opencv-image-in-a-pyqt-interface/
+https://stackoverflow.com/questions/57204782/show-an-opencv-image-with-pyqt5
